@@ -1,27 +1,18 @@
-This is a starter template for [Ionic](http://ionicframework.com/docs/) projects.
+## BLE TEST
 
-## How to use this template
-
-*This template does not work on its own*. The shared files for each starter are found in the [ionic2-app-base repo](https://github.com/ionic-team/ionic2-app-base).
-
-To use this template, either create a new ionic project using the ionic node.js utility, or copy the files from this repository into the [Starter App Base](https://github.com/ionic-team/ionic2-app-base).
-
-### With the Ionic CLI:
-
-Take the name after `ionic2-starter-`, and that is the name of the template to be used when using the `ionic start` command below:
-
-```bash
-$ sudo npm install -g ionic cordova
-$ ionic start myTabs tabs
-```
-
-Then, to run it, cd into `myTabs` and run:
-
-```bash
-$ ionic cordova platform add ios
-$ ionic cordova run ios
-```
-
-Substitute ios for android if not on a Mac.
-
-# BLE-IONIC-TEST
+  
+      WORK AROUND FOR DEVICE THAT IS AWAYS NOTIFY - ON
+  
+      Since the iTag doesn't meet spec, it's not going to work with the
+      plugin. Assuming that notifications are always enabled on the device,
+      you can probably modify the plugin to make it work.
+  
+      For Android comment out the code that returns an error.
+  
+      cordova-plugin-ble-central/src/android/Peripheral.java
+      callbackContext.error("Set notification failed for " + characteristicUUID);
+  
+  
+      For iOS comment out the code that tries to write to the descriptor
+      [peripheral setNotifyValue:YES forCharacteristic:characteristic];
+       

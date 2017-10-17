@@ -1,17 +1,24 @@
 <ion-header>
   <ion-navbar>
-    <ion-title>Home</ion-title>
+    <ion-title>BLE TEST</ion-title>
   </ion-navbar>
 </ion-header>
 
 <ion-content padding>
-  <h2>Welcome to Ionic!</h2>
-  <p>
-    This starter project comes with simple tabs-based layout for apps
-    that are going to primarily use a Tabbed UI.
-  </p>
-  <p>
-    Take a look at the <code>src/pages/</code> directory to add or change tabs,
-    update any existing page or create new pages.
-  </p>
+  <ion-list no-margin *ngIf="devices.length > 0;else nolog">
+
+    <button ion-item *ngFor="let device of devices" (click)="connect(device)">
+      <h2>{{ device.name || 'Unnamed' }}</h2>
+      <p>{{ device.id }}</p>
+      <p>RSSI: {{ device.rssi }}</p>
+    </button>
+  </ion-list>
+  <ng-template #nolog>
+    <p span-small text-wrap>{{msg}}</p>
+  </ng-template>
 </ion-content>
+<ion-footer>
+  <ion-buttons>
+    <button ion-button (click)="scan()" block color="{{buttonClass}}">{{button}}</button>
+  </ion-buttons>
+</ion-footer>
