@@ -1,0 +1,56 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>{{ peripheral.name || 'Device' }}</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content class="padding">
+
+  <ion-card>
+    <ion-card-header>
+      {{ peripheral.name || 'Unnamed' }}
+    </ion-card-header>
+    <ion-card-content>
+      {{ peripheral.id }}
+    </ion-card-content>
+  </ion-card>
+
+  <ion-card>
+    <ion-card-header>
+      Services
+    </ion-card-header>
+
+    <ion-list>
+      <ion-item *ngFor="let service of peripheral.services">
+        {{service}}
+      </ion-item>
+    </ion-list>
+  </ion-card>
+
+  <ion-card>
+    <ion-card-header>
+      Details
+    </ion-card-header>
+    <ion-card-content>
+      <pre>{{peripheral | json }}</pre>
+    </ion-card-content>
+  </ion-card>
+</ion-content>
+
+<ion-footer>
+  <ion-toolbar>
+    <ion-row>
+
+      <ion-col col-6>
+        <p>{{ statusMessage }}</p>
+      </ion-col>
+      <ion-col col-6 (tap)="resetButton()">
+        <p>{{ buttonState | buttonStateDescription }}</p>
+      </ion-col>
+
+    </ion-row>
+  </ion-toolbar>
+  <ion-buttons>
+    <button ion-button (click)="disconnect()" block color="danger">Disconnect</button>
+  </ion-buttons>
+</ion-footer>
