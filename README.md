@@ -1,6 +1,6 @@
 ## BLE TEST
 
-  # Instructions to run
+  ## Instructions to run
   1. Clone repo to your machine
   2. npm install
   3. cordova platform add android
