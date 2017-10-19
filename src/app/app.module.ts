@@ -13,6 +13,8 @@ import {DevicePage} from "../pages/device/device";
 import {Toast} from "@ionic-native/toast";
 import {IonicStorageModule, Storage} from "@ionic/storage";
 import {ButtonStateDescriptionPipe} from "../pipes/button-state-description/button-state-description";
+import {Vibration} from "@ionic-native/vibration";
+import {LocalNotifications} from "@ionic-native/local-notifications";
 
 @NgModule({
   declarations: [
@@ -33,9 +35,11 @@ import {ButtonStateDescriptionPipe} from "../pipes/button-state-description/butt
     DevicePage
   ],
   providers: [
+    Vibration,
     SpinnerDialog,
     Toast,
     BLE,
+    LocalNotifications,
     StatusBar,
     SplashScreen,
     {provide: ErrorHandler, useClass: IonicErrorHandler}

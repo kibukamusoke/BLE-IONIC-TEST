@@ -1,12 +1,14 @@
 import {Component, NgZone} from '@angular/core';
-import {AlertController, IonicPage, NavController, NavParams, ToastController} from 'ionic-angular';
+import {AlertController, IonicPage, NavController, NavParams, Platform, ToastController} from 'ionic-angular';
 import {BLE} from "@ionic-native/ble";
 import {Storage} from "@ionic/storage";
 import {HomePage} from "../home/home";
+import {Vibration} from "@ionic-native/vibration";
+import {LocalNotifications} from "@ionic-native/local-notifications";
 
 // Bluetooth UUIDs
-const BUTTON_SERVICE = 'FFE0';
-const BUTTON_STATE_CHARACTERISTIC = 'FFE1';
+const BUTTON_SERVICE = 'FFF0';
+const BUTTON_STATE_CHARACTERISTIC = 'FFF1';
 
 @Component({
   selector: 'page-device',
@@ -26,7 +28,10 @@ export class DevicePage {
               private ngZone: NgZone,
               private alertCtrl: AlertController,
               private toastCtrl: ToastController,
-              private storage: Storage) {
+              private storage: Storage,
+              private vibration: Vibration,
+              private localNotifications: LocalNotifications,
+              private platform: Platform) {
 
 
     this.device = this.navParams.get('device');
@@ -62,6 +67,33 @@ export class DevicePage {
     this.peripheral = peripheral;
     this.setStatus('Connected to ' + (peripheral.name || peripheral.id));
 
+    this.startNotifications();
+    /*this.stopNotifications()
+      .then(() => {
+        this.startNotifications();
+      })
+      .catch(() => {
+        this.startNotifications();
+      }) */
+
+  }
+
+
+  stopNotifications(): Promise<any> {
+    return new Promise((resolve, reject) => {
+      this.ble.stopNotification(this.peripheral.id, BUTTON_SERVICE , BUTTON_STATE_CHARACTERISTIC)
+        .then(() => {
+          resolve();
+        })
+        .catch((e) => {
+        console.log(e);
+          reject();
+        })
+    });
+
+  }
+
+  startNotifications(): void {
     /*
     WORK AROUND FOR DEVICE THAT IS AWAYS NOTIFY - ON
 
@@ -82,7 +114,6 @@ export class DevicePage {
       data => this.onButtonStateChange(data),
       (e) => this.showAlert('Unexpected Error', 'Failed to subscribe for button state changes ' + e)
     )
-
   }
 
 
@@ -100,8 +131,12 @@ export class DevicePage {
   }
 
   onButtonStateChange(buffer: ArrayBuffer) {
+    this.vibration.vibrate(500);
+
+
     let data = new Uint8Array(buffer);
     console.log(data[0]);
+    this.notification(data[0]);
 
     this.ngZone.run(() => {
       this.buttonState = data[0];
@@ -139,6 +174,16 @@ export class DevicePage {
     console.log(message);
     this.ngZone.run(() => {
       this.statusMessage = message;
+    });
+  }
+
+  notification(data): void {
+    // Schedule a single notification
+
+    this.localNotifications.schedule({
+      title: 'BLE',
+      text: 'Button press detected, DATA: ' + data,
+      sound: this.platform.is('android') ? 'file://sound.mp3': 'file://beep.caf'
     });
   }
 
