@@ -14,8 +14,8 @@
   
   ## resources: 
   
-  BLE - https://github.com/don/cordova-plugin-ble-central
-  Local Notifications: https://github.com/katzer/cordova-plugin-local-notifications 
+  * BLE - https://github.com/don/cordova-plugin-ble-central
+  * Local Notifications: https://github.com/katzer/cordova-plugin-local-notifications 
   
   ionic docs: https://ionicframework.com/docs/native/
 
